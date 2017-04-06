@@ -63,4 +63,68 @@ switch ($_GET['act']) {
         exit;
         break;
 
+    case 'getcommunicationitems' :
+        header("HTTP/1.0 200 OK");
+        header('Content-Type: application/json');
+        session_start();
+
+        $data = array();
+        $i = rand (0, 20);
+        $data = (object) array (
+            'id' => $i,
+            'name' => (object) array (
+                value => "user$i",
+                top => rand (0, 500),
+                left =>  rand (0, 500),
+                isPlaced => rand (0,1),
+            ),
+            'email' => (object) array (
+                value => "user$i@mail.mu",
+                top => rand (0, 500),
+                left =>  rand (0, 500),
+                isPlaced => rand (0,1),
+            ),
+            'createdAt' => (object) array (
+                value => "2017-02-26 12:14:10",
+                top => rand (0, 500),
+                left =>  rand (0, 500),
+                isPlaced => rand (0,1),
+            ),
+            'READ' => rand (0,1),
+            'EDIT' => rand (0,1),
+            'DELETE' => rand(0,1),
+
+        );
+        
+        $out = (object) array (
+            'data' => $data,
+        );
+        $_SESSION['data'] = $out;
+        echo json_encode($out);
+        exit;
+        break;
+    case 'savecommunicationitems' : 
+        header("HTTP/1.0 200 OK");
+        header('Content-Type: application/json');
+        session_start();
+        echo "savecommunicationitems";
+        print_r ($POST);
+        echo "\n<br><br>\n";
+        print_r($_SESSION['data']);
+
+        //Compare $_SESSION['data'] and $POST
+        //and save only those which changed (in Vue it is almost impossible to do so. SO on the backend)
+
+        exit;
+        break;
+
+    case 'deletecommunicationitems' : 
+        header("HTTP/1.0 200 OK");
+        header('Content-Type: application/json');
+        session_start();
+        //Delete items for user with $_SESSION["user_id"] or something like that.
+
+        exit;
+        break;
+
 }

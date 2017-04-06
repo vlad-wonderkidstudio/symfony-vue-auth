@@ -6,6 +6,10 @@ var network = {
   LOGOUT_URL : '/back/index.php?act=logout',
   SETTINGS_ITEMS_GET : '/back/index.php?act=getsettingsitems',
   SETTINGS_ITEMS_SAVE : '/back/index.php?act=savesettingsitems',
+  COMMUNICATION_ITEMS_GET : '/back/index.php?act=getcommunicationitems',
+  COMMUNICATION_ITEMS_SAVE : '/back/index.php?act=savecommunicationitems',
+  COMMUNICATION_ITEMS_DELETE : '/back/index.php?act=deletecommunicationitems',
+
 
   // User object will let us check authentication status
   user: {
@@ -85,7 +89,6 @@ var network = {
   */
   saveSettingsItems: function (params) {
     var url = this.SETTINGS_ITEMS_SAVE;
-    //var params = {};
     axios.post(url, params)
       .then(function (response) {
         console.log(response);
@@ -95,5 +98,58 @@ var network = {
         console.log(error);
         alert(error);
       });
+  },
+
+    /**
+    * get the items from the API server
+    * 
+    * @param context Object - a Vue object inside which it was launched
+  */
+  getCommunicationItems : function (context){
+    var url = this.COMMUNICATION_ITEMS_GET;
+    
+    axios.get(url)
+      .then(function (response) {
+        console.log(response);
+        context.updateItems (response.data);  
+      })
+      .catch(function (error) {
+        console.log(error);
+        alert(error);
+      });
+  },
+
+  /**
+    * Save items to API server
+  */
+  saveCommunicationItems: function (params) {
+    var url = this.COMMUNICATION_ITEMS_SAVE;
+    axios.post(url, params)
+      .then(function (response) {
+        console.log(response);
+        alert('saved');
+      })
+      .catch(function (error) {
+        console.log(error);
+        alert(error);
+      });
+  },
+
+  /**
+    * Save items to API server
+  */
+  deleteCommunicationItems: function (params) {
+    var url = this.COMMUNICATION_ITEMS_DELETE;
+    axios.post(url, params)
+      .then(function (response) {
+        console.log(response);
+        alert('deleted');
+      })
+      .catch(function (error) {
+        console.log(error);
+        alert(error);
+      });
   }
+
+  
 };

@@ -17,17 +17,6 @@ var SettingsForm = Vue.extend({
   created: function () {
     network.getSettingsItems (this);
   },
-  watch: {
-    $route : function () {
-      console.log('---List-watch');
-      //If we changed a page
-     /*
-      if (this.$route && this.$route.params && this.$route.params.page){
-          this.getItemsFromAPI (this.$route.params.page);
-      }
-      */
-    }
-  },
   methods : {
  
     /**
