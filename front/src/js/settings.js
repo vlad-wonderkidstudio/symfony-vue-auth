@@ -16,22 +16,6 @@ var SettingsForm = Vue.extend({
   created: function () {
     network.getSettingsItems (this);
   },
-/*
-  watch: {
-    items: {
-        handler: function(val, oldVal) {
-            //this.foo(); // call it in the context of your component object
-            console.log (val[0].permissions + ';;' + oldVal[0].permissions);
-            console.log ("============val=");
-            console.log (val);
-            console.log ("============oldVal=");
-            console.log (oldVal);
-
-        },
-        deep: true
-    }
-  },
-  */
   methods : {
      /**
       * updates items info using the JSON object got from the API server

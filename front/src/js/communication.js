@@ -69,7 +69,6 @@ var CommunicationForm = Vue.extend({
       coords = getOffset(e);
       coords.x -= this.draggedItemCoords.x;
       coords.y -= this.draggedItemCoords.y;
-      console.log(this.draggedItem);
 
       switch (this.draggedItem) {
         case 'nameBadge':

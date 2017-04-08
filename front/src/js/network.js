@@ -71,7 +71,7 @@ var network = {
     * 
     * @param context Object - a Vue object inside which it was launched
   */
-  getSettingsItems : function (context, sucess){
+  getSettingsItems : function (context){
     var url = this.SETTINGS_ITEMS_GET;
     
     axios.get(url)
