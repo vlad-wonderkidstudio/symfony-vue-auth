@@ -31,9 +31,7 @@
     :filter-permission="searchPermission"
     >
   </users-grid>
-  <div class="footer">
-    <button type="Button" class="btn btn-primary  float-right btn-lg"  @click="save()" >Save changes</button>
-  </div>
+  <div class="footer">&nbsp;</div>
   
 
   </section>

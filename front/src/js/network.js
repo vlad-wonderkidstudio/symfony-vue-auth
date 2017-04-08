@@ -6,6 +6,7 @@ var network = {
   LOGOUT_URL : '/back/index.php?act=logout',
   SETTINGS_ITEMS_GET : '/back/index.php?act=getsettingsitems',
   SETTINGS_ITEMS_SAVE : '/back/index.php?act=savesettingsitems',
+  SETTINGS_ITEM_SAVE :  '/back/index.php?act=savesettingsitem',
   COMMUNICATION_ITEMS_GET : '/back/index.php?act=getcommunicationitems',
   COMMUNICATION_ITEMS_SAVE : '/back/index.php?act=savecommunicationitems',
   COMMUNICATION_ITEMS_DELETE : '/back/index.php?act=deletecommunicationitems',
@@ -70,13 +71,28 @@ var network = {
     * 
     * @param context Object - a Vue object inside which it was launched
   */
-  getSettingsItems : function (context){
+  getSettingsItems : function (context, sucess){
     var url = this.SETTINGS_ITEMS_GET;
     
     axios.get(url)
       .then(function (response) {
         console.log(response);
         context.updateItems (response.data);  
+      })
+      .catch(function (error) {
+        console.log(error);
+        alert(error);
+      });
+  },
+
+  /**
+    * Save item to API server
+  */
+  saveSettingsItem : function (item) {
+    var url = this.SETTINGS_ITEM_SAVE;
+    axios.post(url, item)
+      .then(function (response) {
+        console.log(response);
       })
       .catch(function (error) {
         console.log(error);
@@ -143,7 +159,6 @@ var network = {
     axios.post(url, params)
       .then(function (response) {
         console.log(response);
-        alert('deleted');
       })
       .catch(function (error) {
         console.log(error);

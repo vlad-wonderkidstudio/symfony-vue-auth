@@ -64,11 +64,13 @@ var CommunicationForm = Vue.extend({
     drop: function(e) {
       console.log('Looks like you dropped something!');
       console.log(e);
+      if(e.preventDefault) { e.preventDefault(); }
+      if(e.stopPropagation) { e.stopPropagation(); }
       coords = getOffset(e);
-      console.log (coords.x);
-      console.log (coords.y);
       coords.x -= this.draggedItemCoords.x;
       coords.y -= this.draggedItemCoords.y;
+      console.log(this.draggedItem);
+
       switch (this.draggedItem) {
         case 'nameBadge':
             this.items.name.isPlaced = 1;
@@ -88,6 +90,7 @@ var CommunicationForm = Vue.extend({
         default:
           break;
       }
+      console.log (this.items);
       this.refreshItems();
 
     },
@@ -95,10 +98,8 @@ var CommunicationForm = Vue.extend({
     * Occures, when we start to drag a tag
     */
     dragStart: function (e) {
-      console.log('=========drag start');
       coords = getOffset(e);
       this.draggedItemCoords = coords;
-      console.log (coords);
       this.draggedItem = e.target.id;
       e.dataTransfer.setData('Text', this.id);
     },
@@ -118,11 +119,9 @@ var CommunicationForm = Vue.extend({
     deleteItem: function () {
       console.log('--------------delete------------------');
       network.deleteCommunicationItems();
-      this.items = {
-        name: {},
-        email: {},
-        createdAt: {},
-      };
+      this.items.name.isPlaced = 0;
+      this.items.email.isPlaced = 0;
+      this.items.createdAt.isPlaced = 0;
     },
 
 

@@ -10,11 +10,28 @@ var SettingsForm = Vue.extend({
       searchQuery: '',
       columnsNames: ['name', 'email', 'createdAt', 'READ', 'EDIT', 'DELETE', 'NONE'],
       searchPermission: '',
+      changedItem: {},
     };
   },
   created: function () {
     network.getSettingsItems (this);
   },
+/*
+  watch: {
+    items: {
+        handler: function(val, oldVal) {
+            //this.foo(); // call it in the context of your component object
+            console.log (val[0].permissions + ';;' + oldVal[0].permissions);
+            console.log ("============val=");
+            console.log (val);
+            console.log ("============oldVal=");
+            console.log (oldVal);
+
+        },
+        deep: true
+    }
+  },
+  */
   methods : {
      /**
       * updates items info using the JSON object got from the API server
@@ -29,6 +46,42 @@ var SettingsForm = Vue.extend({
 
       this.items = _.clone(itemsO.data);
       items = this.items;
+
+      var self = this;
+      for (var i = 0; i < this.items.length; i++ )
+      {
+        
+        this.$watch('items.'+i, function (item) { self.itemChanged(item);}, {deep: true});
+      }
+    },
+
+    /*
+    * Occures, when some item is being changed
+    */
+    itemChanged: function  (item) {
+      var self = this;
+      //remove old delay saveItem function, if it has to do with the same item id
+      if (this.changedItem.TimerId && typeof this.changedItem.TimerId === 'number' && this.changedItem.id == item.id) {
+        window.clearTimeout(this.changedItem.TimerId);
+        this.changedItem.TimerId = undefined;
+      }
+      this.changedItem.id = item.id;
+      this.changedItem.TimerId = _.delay(function (itemO) {self.saveItem(itemO)}, 300, item);
+    },
+
+    /**
+    * Save changes in item to the server
+    */
+    saveItem: function (item) {
+      console.log('--------------save item------------------');
+      save_item = {};
+      save_item.id = item ['id'];
+      save_item.name = item ['name'];
+      save_item.email = item ['email'];
+      save_item.createdAt = item ['createdAt'];
+      save_item.permissions =  item ['permissions'];
+      //console.log (item);
+      network.saveSettingsItem(save_item);
     },
 
     /**

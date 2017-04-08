@@ -66,6 +66,18 @@ switch ($_GET['act']) {
 
         exit;
         break;
+    case 'savesettingsitem' : 
+        header("HTTP/1.0 200 OK");
+        header('Content-Type: application/json');
+        session_start();
+        print_r ($POST);
+        echo "\n<br><br>\n";
+        print_r($_SESSION['data']);
+
+        //save the item
+
+        exit;
+        break;
 
     case 'getcommunicationitems' :
         header("HTTP/1.0 200 OK");
