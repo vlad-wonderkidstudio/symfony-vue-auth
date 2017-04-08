@@ -10,49 +10,25 @@
           <label for="searchQueryInput">Search</label>
           <input id="searchQueryInput" name="query" v-model="searchQuery" placeholder="Search for...">
         </div>
-        
+
         <div class="form-group">
-            <span class="badge badge-pill badge-default badge-perm"> - Search by permissions - </span>
-
-          
-        </div>
-        <div class="form-group">
-          <label for="search-read"> Read</label>
-          <select  id="search-read" v-model="searchREAD">
-            <option value = '0' >-</option>
-            <option value = '1'>Yes</option>
-            <option value = '2'>No</option>
-          </select>
-
-          <label for="search-edit"> Edit</label>
-          <select  id="search-edit" v-model="searchEDIT">
-            <option value = '0' >-</option>
-            <option value = '1'>Yes</option>
-            <option value = '2'>No</option>
-          </select>
-
-          <label for="search-delete"> Delete </label>
-          <select  id="search-delete" v-model="searchDELETE">
-            <option value = '0' >-</option>
-            <option value = '1'>Yes</option>
-            <option value = '2'>No</option>
+          <label for="search-read"> Permissions</label>
+          <select  id="search-read" v-model="searchPermission">
+            <option value = '' >&nbsp;</option>
+            <option value = '1'>Read</option>
+            <option value = '2'>Edit</option>
+            <option value = '3'>Delete</option>
+            <option value = '0'>None</option>
           </select>
         </div>
-
-          
-
     </div>
   </div>
-
-  
 
   <users-grid
     :data="items"
     :columns="columnsNames"
     :filter-key="searchQuery"
-    :filter-read="searchREAD"
-    :filter-edit="searchEDIT"
-    :filter-delete="searchDELETE"
+    :filter-permission="searchPermission"
     >
   </users-grid>
   <div class="footer">
@@ -97,6 +73,11 @@
           <span class="arrow" :class="sortOrders['DELETE'] > 0 ? 'asc' : 'dsc'">
           </span>
         </th>
+        <th  @click="sortBy('NONE')" class="hand" :class="{ active: sortKey == 'NONE' }">
+          NONE
+          <span class="arrow" :class="sortOrders['NONE'] > 0 ? 'asc' : 'dsc'">
+          </span>
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -104,14 +85,17 @@
         <td>{{ item.name }}</td>
         <td>{{ item.email }}</td>
         <td>{{ item.createdAt }}</td>
-        <td>
-          <input type="checkbox" value="1" v-model="item.READ">
+        <td align=center>
+          <input type="radio" value="1" v-model="item.permissions" :checked="item.permissions == 1">
         </td>
-        <td>
-          <input type="checkbox" value="1" v-model="item.EDIT">
+        <td  align=center>
+          <input type="radio" value="2" v-model="item.permissions" :checked="item.permissions == 2">
         </td>
-        <td>
-          <input type="checkbox" value="1" v-model="item.DELETE">
+        <td  align=center>
+          <input type="radio" value="3" v-model="item.permissions" :checked="item.permissions == 3">
+        </td>
+        <td  align=center>
+          <input type="radio" value="0" v-model="item.permissions" :checked="item.permissions == 0">
         </td>
       </tr>
     </tbody>

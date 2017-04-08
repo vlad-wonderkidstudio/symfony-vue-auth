@@ -8,18 +8,15 @@ var SettingsForm = Vue.extend({
       items: items,
       limit: 0,
       searchQuery: '',
-      columnsNames: ['name', 'email', 'createdAt', 'READ', 'EDIT', 'DELETE'],
-      searchREAD: 0,
-      searchEDIT: 0,
-      searchDELETE: 0,
+      columnsNames: ['name', 'email', 'createdAt', 'READ', 'EDIT', 'DELETE', 'NONE'],
+      searchPermission: '',
     };
   },
   created: function () {
     network.getSettingsItems (this);
   },
   methods : {
- 
-    /**
+     /**
       * updates items info using the JSON object got from the API server
       * 
       * @param itemsO Object , JSON Object got from the API server
@@ -46,15 +43,11 @@ var SettingsForm = Vue.extend({
         save_items[i].name = this.items[i] ['name'];
         save_items[i].email = this.items[i] ['email'];
         save_items[i].createdAt = this.items[i] ['createdAt'];
-        save_items[i].READ = this.items[i] ['READ'] ? 1 : 0;
-        save_items[i].EDIT = this.items[i] ['EDIT'] ? 1 : 0;
-        save_items[i].DELETE = this.items[i] ['DELETE'] ? 1 : 0;
-
+        save_items[i].permissions =  this.items[i] ['permissions'];
       }
       console.log (items);
       network.saveSettingsItems(save_items);
     },
-
    }
 });
 
@@ -65,9 +58,7 @@ Vue.component('users-grid', {
     data: Array,
     columns: Array,
     filterKey: String,
-    filterRead: 0,
-    filterEdit: 0,
-    filterDelete: 0,
+    filterPermission: 0,
   },
   data: function () {
     var sortOrders = {}
@@ -80,14 +71,16 @@ Vue.component('users-grid', {
     }
   },
   computed: {
+    /**
+    * Returns filtered data (for search filters and sorting)
+    **/
     filteredData: function () {
       var sortKey = this.sortKey
       var filterKey = this.filterKey && this.filterKey.toLowerCase()
-      var filterRead = this.filterRead;
-      var filterEdit = this.filterEdit;
-      var filterDelete = this.filterDelete;
+      var filterPermission = this.filterPermission;
       var order = this.sortOrders[sortKey] || 1
       var data = this.data
+      //Filter by filterKey String (Search string)
       if (filterKey) {
         data = data.filter(function (row) {
           return Object.keys(row).some(function (key) {
@@ -98,40 +91,44 @@ Vue.component('users-grid', {
           })
         })
       }
-      if (filterRead && filterRead != 0) {
+      //Filter by permissions
+      if ( filterPermission && filterPermission != '' ) {
         data = data.filter(function (row) {
-          if (row['READ'] && filterRead == 1) return true;
-          if (!row['READ'] && filterRead == 2) return true;
+          if (filterPermission == row['permissions'] ) return true;
           return false;
         }) 
       }
-      if (filterEdit && filterEdit != 0) {
-        data = data.filter(function (row) {
-          if (row['EDIT'] && filterEdit == 1) return true;
-          if (!row['EDIT'] && filterEdit == 2) return true;
-          return false;
-        }) 
-      }
-      if (filterDelete && filterDelete != 0) {
-        data = data.filter(function (row) {
-          if (row['DELETE'] && filterDelete == 1) return true;
-          if (!row['DELETE'] && filterDelete == 2) return true;
-          return false;
-        }) 
-      }
+      //Sort by of the field
       if (sortKey) {
         data = data.slice().sort(function (a, b) {
-          a = a[sortKey]
-          b = b[sortKey]
-          return (a === b ? 0 : a > b ? 1 : -1) * order
+          if (sortKey == 'READ'){
+            a = a['permissions']
+            b = b['permissions']
+            return (a === b ? 0 : a == 1 ? 1 : -1) * order
+          }
+          else if (sortKey == 'EDIT'){
+            a = a['permissions']
+            b = b['permissions']
+            return (a === b ? 0 : a == 2 ? 1 : -1) * order
+          }
+          else if (sortKey == 'DELETE'){
+            a = a['permissions']
+            b = b['permissions']
+            return (a === b ? 0 : a == 3 ? 1 : -1) * order
+          }
+          else if (sortKey == 'NONE'){
+            a = a['permissions']
+            b = b['permissions']
+            return (a === b ? 0 : a == 0 ? 1 : -1) * order
+          }
+          else {
+            a = a[sortKey]
+            b = b[sortKey]
+            return (a === b ? 0 : a > b ? 1 : -1) * order
+          }
         })
       }
       return data
-    }
-  },
-  filters: {
-    capitalize: function (str) {
-      return str.charAt(0).toUpperCase() + str.slice(1)
     }
   },
   methods: {

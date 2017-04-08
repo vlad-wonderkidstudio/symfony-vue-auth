@@ -32,14 +32,18 @@ switch ($_GET['act']) {
 
         $data = array();
         for ($i = 0; $i< 20; $i++) {
+
+            $acl = rand (0,3);
             $data [$i] = (object) array (
                 'id' => $i,
                 'name' => "user$i",
                 'email' => "user$i\@user.uu",
                 'createdAt' => '2017-02-26 12:14:10 ',
-                'READ' => rand (0,1),
-                'EDIT' => rand (0,1),
-                'DELETE' => rand(0,1),
+                'permissions' => $acl,
+                //'READ' => ($acl == 1) ? 1 : 0,
+                //'EDIT' => ($acl == 2) ? 1 : 0,
+                //'DELETE' => ($acl == 3) ? 1 : 0,
+                //'NONE' => ($acl == 0) ? 1 : 0,
             );
         }
         $out = (object) array (
@@ -70,6 +74,7 @@ switch ($_GET['act']) {
 
         $data = array();
         $i = rand (0, 20);
+
         $data = (object) array (
             'id' => $i,
             'name' => (object) array (

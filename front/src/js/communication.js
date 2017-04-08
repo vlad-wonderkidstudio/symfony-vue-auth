@@ -100,6 +100,7 @@ var CommunicationForm = Vue.extend({
       this.draggedItemCoords = coords;
       console.log (coords);
       this.draggedItem = e.target.id;
+      e.dataTransfer.setData('Text', this.id);
     },
 
     /**
